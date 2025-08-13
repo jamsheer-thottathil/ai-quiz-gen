@@ -9,6 +9,7 @@ export class GeminiService {
   async generateQuiz(settings: QuizSettings): Promise<GeminiResponse> {
     try {
       const prompt = this.buildPrompt(settings);
+      console.log('Generated prompt:', prompt);
       const result = await this.model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
@@ -16,8 +17,8 @@ export class GeminiService {
       if (!jsonMatch) {
         throw new Error('Invalid response format from Gemini API');
       }
-      const quizData = JSON.parse(jsonMatch[1]);
-      return quizData;
+      const { questions } = JSON.parse(jsonMatch[1]);
+      return { questions, prompt };
     } catch (error) {
       console.error('Error generating quiz:', error);
       throw new Error('Failed to generate quiz. Please try again.');

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { AppBar, Toolbar, Typography, Container, Box, Link, Stack, Paper } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, Stack, Paper } from '@mui/material';
 import { Brain, PartyPopper } from 'lucide-react';
 import { QuizGenerator } from './components/QuizGenerator';
 import { QuizTaker } from './components/QuizTaker';
@@ -14,18 +14,22 @@ function App() {
   const [currentView, setCurrentView] = useState<'generator' | 'quiz' | 'results'>('generator');
   const [currentQuiz, setCurrentQuiz] = useState<Quiz | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+const [promptAndResult, setPromptAndResult] = useState<{
+    prompt: string;
+      questions: {
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
+  }[];
+  } | null>(null);
 
 
   useEffect(() => {
-    // Render Lucide icon to static markup (SVG)
     const svgString = ReactDOMServer.renderToStaticMarkup(
       <Brain size={32} color={primary} />
     );
-
-    // Encode SVG for use in URL
     const svgDataUrl = `data:image/svg+xml,${encodeURIComponent(svgString)}`;
-
-    // Create or update favicon link tag
     let link = document.querySelector("link[rel='icon']") as HTMLLinkElement | null;
     if (!link) {
       link = document.createElement("link") as HTMLLinkElement;
@@ -55,7 +59,7 @@ function App() {
   const renderContent = () => {
     switch (currentView) {
       case 'generator':
-        return <QuizGenerator onQuizGenerated={handleQuizGenerated} />;
+        return <QuizGenerator onQuizGenerated={handleQuizGenerated} setPromptAndResult={setPromptAndResult} />;
       case 'quiz':
         return currentQuiz ? (
           <QuizTaker
@@ -70,10 +74,11 @@ function App() {
             quiz={currentQuiz}
             result={quizResult}
             onBack={handleBackToGenerator}
+            promptAndResult={promptAndResult}
           />
         ) : null;
       default:
-        return <QuizGenerator onQuizGenerated={handleQuizGenerated} />;
+        return <QuizGenerator onQuizGenerated={handleQuizGenerated} setPromptAndResult={setPromptAndResult} />;
     }
   };
 

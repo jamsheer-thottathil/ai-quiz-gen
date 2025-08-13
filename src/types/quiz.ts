@@ -38,6 +38,7 @@ export interface QuizResult {
 }
 
 export interface GeminiResponse {
+  prompt: string;
   questions: {
     question: string;
     options: string[];

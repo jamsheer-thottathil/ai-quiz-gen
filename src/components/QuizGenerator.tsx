@@ -19,9 +19,10 @@ import {
 
 interface QuizGeneratorProps {
   onQuizGenerated: (quiz: Quiz) => void;
+  setPromptAndResult: ({ prompt, questions }: { prompt: string; questions: { question: string; options: string[]; correctAnswer: number; explanation: string; }[] }) => void;
 }
 
-export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated }) => {
+export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated, setPromptAndResult }) => {
   const [settings, setSettings] = useState<QuizSettings>({
     topic: '',
     difficulty: 'medium',
@@ -49,14 +50,14 @@ export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated })
     setIsGenerating(true);
     setError(null);
     try {
-      const response = await geminiService.generateQuiz(settings);
+      const { questions, prompt } = await geminiService.generateQuiz(settings);
       const quiz: Quiz = {
         id: Date.now().toString(),
         title: `${settings.topic} Quiz`,
         description: `A ${settings.difficulty} level quiz about ${settings.topic}`,
         topic: settings.topic,
         difficulty: settings.difficulty,
-        questions: response.questions.map((q, index) => ({
+        questions: questions.map((q, index) => ({
           id: index.toString(),
           question: q.question,
           options: q.options,
@@ -66,6 +67,7 @@ export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated })
         createdAt: new Date(),
       };
       onQuizGenerated(quiz);
+      setPromptAndResult({ prompt, questions });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate quiz');
     } finally {

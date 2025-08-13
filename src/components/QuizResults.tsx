@@ -1,4 +1,4 @@
-import { CheckCircle, XCircle, Trophy, ArrowLeft, Share2 } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy, ArrowLeft } from 'lucide-react';
 import type { Quiz, QuizResult } from '../types/quiz';
 import {
   Box,
@@ -9,16 +9,28 @@ import {
   Stack,
   Paper,
   Alert,
-  Grid
 } from '@mui/material';
+import { useState } from 'react';
+import PromptResult from './PromtResult';
 
 interface QuizResultsProps {
   quiz: Quiz;
   result: QuizResult;
   onBack: () => void;
+  promptAndResult: {
+    prompt: string;
+    questions: {
+      question: string;
+      options: string[];
+      correctAnswer: number;
+      explanation: string;
+    }[];
+  } | null;
 }
 
-export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }) => {
+export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack, promptAndResult }) => {
+  const [open, setOpen] = useState(false);
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'success.main';
     if (score >= 60) return 'warning.main';
@@ -38,28 +50,7 @@ export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }
     const seconds = Math.floor((milliseconds % 60000) / 1000);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
-
-  const handleShare = async () => {
-    const shareText = `I scored ${Math.round(result.score)}% on the ${quiz.title}! 🎯`;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Quiz Results',
-          text: shareText,
-        });
-      } catch (error) {
-        // ignore
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(shareText);
-        alert('Results copied to clipboard!');
-      } catch (error) {
-        // ignore
-      }
-    }
-  };
-
+  
   return (
     <Box display="flex" justifyContent="center" alignItems="flex-start" minHeight="60vh">
       <Card sx={{ width: '100%', maxWidth: 800, p: 2, boxShadow: 3 }}>
@@ -69,16 +60,16 @@ export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }
             <Typography variant="h4" fontWeight={700} color="text.primary">
               Quiz Complete!
             </Typography>
-           <Typography variant="subtitle1" color="text.secondary">
+            <Typography variant="subtitle1" color="text.secondary">
               {/* You've finished the {quiz.title} */}
               {result.score >= 80 ? "Congratulations! You won!" : 'Better luck next time!'}
             </Typography>
           </Stack>
 
-          <Stack 
-            direction={{ xs: 'column', sm: 'row' }} 
-            spacing={2} 
-            justifyContent="center" 
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            justifyContent="center"
             sx={{ mb: 4 }}
           >
             <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'success.lighter', flex: 1 }}>
@@ -138,14 +129,14 @@ export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }
                               optionIndex === question.correctAnswer
                                 ? '#e8f5e9'
                                 : optionIndex === answer.selectedAnswer && !isCorrect
-                                ? '#ffebee'
-                                : 'white',
+                                  ? '#ffebee'
+                                  : 'white',
                             border:
                               optionIndex === question.correctAnswer
                                 ? '1px solid #43a047'
                                 : optionIndex === answer.selectedAnswer && !isCorrect
-                                ? '1px solid #e53935'
-                                : '1px solid #e0e0e0',
+                                  ? '1px solid #e53935'
+                                  : '1px solid #e0e0e0',
                             display: 'flex',
                             alignItems: 'center',
                           }}
@@ -175,9 +166,10 @@ export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }
             <Button onClick={onBack} variant="outlined" color="inherit" startIcon={<ArrowLeft />}>
               Generate New Quiz
             </Button>
-            <Button onClick={handleShare} variant="contained" color="primary" startIcon={<Share2 />}>
-              Share Results
+            <Button onClick={() => setOpen(true)} variant="contained" color="primary" >
+              Show Prompt and Results
             </Button>
+            {open && <PromptResult open={open} onClose={() => setOpen(false)} promptAndResult={promptAndResult} />}
           </Stack>
         </CardContent>
       </Card>
