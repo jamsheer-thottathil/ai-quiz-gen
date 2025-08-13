@@ -86,7 +86,7 @@ export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated })
                 AI Quiz Generator
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Generate custom quizzes powered by AI
+                Generate custom quiz powered by AI
               </Typography>
             </Box>
           </Stack>

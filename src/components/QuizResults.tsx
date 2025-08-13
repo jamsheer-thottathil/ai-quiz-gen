@@ -69,8 +69,9 @@ export const QuizResults: React.FC<QuizResultsProps> = ({ quiz, result, onBack }
             <Typography variant="h4" fontWeight={700} color="text.primary">
               Quiz Complete!
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              You've finished the {quiz.title}
+           <Typography variant="subtitle1" color="text.secondary">
+              {/* You've finished the {quiz.title} */}
+              {result.score >= 80 ? "Congratulations! You won!" : 'Better luck next time!'}
             </Typography>
           </Stack>
 

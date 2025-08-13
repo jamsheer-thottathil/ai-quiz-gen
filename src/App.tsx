@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { AppBar, Toolbar, Typography, Container, Box, Link, Stack, Paper } from '@mui/material';
-import { Brain, Zap, BookOpen, Target } from 'lucide-react';
+import { Brain, PartyPopper } from 'lucide-react';
 import { QuizGenerator } from './components/QuizGenerator';
 import { QuizTaker } from './components/QuizTaker';
 import { QuizResults } from './components/QuizResults';
@@ -13,6 +14,27 @@ function App() {
   const [currentView, setCurrentView] = useState<'generator' | 'quiz' | 'results'>('generator');
   const [currentQuiz, setCurrentQuiz] = useState<Quiz | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+
+
+  useEffect(() => {
+    // Render Lucide icon to static markup (SVG)
+    const svgString = ReactDOMServer.renderToStaticMarkup(
+      <Brain size={32} color={primary} />
+    );
+
+    // Encode SVG for use in URL
+    const svgDataUrl = `data:image/svg+xml,${encodeURIComponent(svgString)}`;
+
+    // Create or update favicon link tag
+    let link = document.querySelector("link[rel='icon']") as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement("link") as HTMLLinkElement;
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.href = svgDataUrl;
+  }, []);
+
 
   const handleQuizGenerated = (quiz: Quiz) => {
     setCurrentQuiz(quiz);
@@ -66,10 +88,10 @@ function App() {
             </Box>
             <Box>
               <Typography variant="h6" fontWeight={700} color="text.primary">
-                Quiz Generator by Gourav
+                Best of Us 2025
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Create and take quizzes instantly
+                Fun & Win <PartyPopper color='red' size={16}/>
               </Typography>
             </Box>
           </Stack>
@@ -84,12 +106,9 @@ function App() {
       {/* Footer */}
       <Paper elevation={0} sx={{ bgcolor: 'white', borderTop: 1, borderColor: '#e0e0e0', py: 2, mt: 4 }} square>
         <Container maxWidth="md">
-          <Typography align="center" variant="body2" color="text.secondary">
-            Built by Gourav •{' '}
-            <Link href="https://github.com" target="_blank" rel="noopener" color="primary">
-              View Source
-            </Link>
-          </Typography>
+            <Typography align="center" variant="body2" color="text.secondary">
+            © 2025 Best of Us — Enjoy learning with quizzes!
+            </Typography>
         </Container>
       </Paper>
     </Box>
