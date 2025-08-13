@@ -113,33 +113,37 @@ export default function PromptResult({ open, onClose, promptAndResult }: PromptR
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Prompt
                                 </Typography>
-                                <Typography variant="body2" fontSize={10} component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontFamily: 'monospace', background: '#f5f5f5', p: 2, borderRadius: 1 }}>
-                                    {prompt}
-                                </Typography>
+                                <div style={{ maxHeight: 400, overflowY: 'auto', marginTop: 2 }}>
+                                    <Typography variant="body2" fontSize={10} component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontFamily: 'monospace', background: '#f5f5f5', p: 2, borderRadius: 1 }}>
+                                        {prompt}
+                                    </Typography>
+                                </div>
                             </Grid>
                             <Grid size={6} borderLeft={1} pl={2} sx={{ maxHeight: 400, overflowY: 'auto', mt: 2 }}>
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Result
                                 </Typography>
-                                <Typography
-                                    variant="body2"
-                                    component="pre"
-                                    sx={{
-                                        whiteSpace: 'pre-wrap',
-                                        wordBreak: 'break-all',
-                                        fontFamily: 'monospace',
-                                        background: '#f5f5f5',
-                                        p: 2,
-                                        borderRadius: 1,
-                                    }}>
-                                    <JsonView 
-                                    collapsed={false} 
-                                    enableClipboard={false} 
-  style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize:10 }}
-        displayDataTypes={false}       // hide types
-        displayObjectSize={false} 
-                                    value={questions} />
-                                </Typography>
+                                <div style={{ maxHeight: 400, overflowY: 'auto', marginTop: 2 }}>
+                                    <Typography
+                                        variant="body2"
+                                        component="pre"
+                                        sx={{
+                                            whiteSpace: 'pre-wrap',
+                                            wordBreak: 'break-all',
+                                            fontFamily: 'monospace',
+                                            background: '#f5f5f5',
+                                            p: 2,
+                                            borderRadius: 1,
+                                        }}>
+                                        <JsonView
+                                            collapsed={false}
+                                            enableClipboard={false}
+                                            style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: 10 }}
+                                            displayDataTypes={false}       // hide types
+                                            displayObjectSize={false}
+                                            value={questions} />
+                                    </Typography>
+                                </div>
                             </Grid>
                         </Grid>
                     </Box>
