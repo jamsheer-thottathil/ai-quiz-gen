@@ -109,7 +109,7 @@ export default function PromptResult({ open, onClose, promptAndResult }: PromptR
                             <X />
                         </Button>
                         <Grid container spacing={2}>
-                            <Grid size={6} sx={{ maxHeight: 400, overflowY: 'auto', mt: 2 }}>
+                            <Grid size={6}>
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Prompt
                                 </Typography>
@@ -119,7 +119,7 @@ export default function PromptResult({ open, onClose, promptAndResult }: PromptR
                                     </Typography>
                                 </div>
                             </Grid>
-                            <Grid size={6} borderLeft={1} pl={2} sx={{ maxHeight: 400, overflowY: 'auto', mt: 2 }}>
+                            <Grid size={6} borderLeft={1} pl={2}>
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Result
                                 </Typography>
