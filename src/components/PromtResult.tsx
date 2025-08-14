@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Backdrop, Box, Button, Modal, Typography } from '@mui/material';
+import { Backdrop, Box, Button, Modal, Typography, Grid } from '@mui/material';
 import { useSpring, animated } from '@react-spring/web';
 import { X } from 'lucide-react';
-import Grid from '@mui/material/Grid';
 import JsonView from '@uiw/react-json-view';
 
 interface FadeProps {
@@ -51,11 +50,13 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 1000,
+    width: { xs: '90vw', sm: 600, md: 800, lg: 1000 },
+    maxHeight: { xs: '90vh', sm: '80vh' },
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: { xs: 2, sm: 4 },
+    overflowY: 'auto',
 };
 
 interface PromptResultProps {
@@ -109,7 +110,7 @@ export default function PromptResult({ open, onClose, promptAndResult }: PromptR
                             <X />
                         </Button>
                         <Grid container spacing={2}>
-                            <Grid size={6}>
+                            <Grid size={{ xs: 12, sm: 12, md: 6  }}>
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Prompt
                                 </Typography>
@@ -119,7 +120,7 @@ export default function PromptResult({ open, onClose, promptAndResult }: PromptR
                                     </Typography>
                                 </div>
                             </Grid>
-                            <Grid size={6} borderLeft={1} pl={2}>
+                            <Grid size={{ xs: 12, sm: 12, md: 6  }} sx={{ borderLeft: 1, pl: 2 }}>
                                 <Typography id="spring-modal-title" variant="h6" component="h2">
                                     Result
                                 </Typography>
